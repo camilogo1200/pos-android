@@ -1,6 +1,7 @@
 package com.hawk.home.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +13,9 @@ import com.hawk.authentication.ui.screens.ConnectionErrorScreen
 import com.hawk.authentication.ui.screens.ForgotPasswordRoute
 import com.hawk.authentication.ui.screens.PasswordResetSuccessScreen
 import com.hawk.authentication.ui.screens.SetNewPasswordRoute
+import com.hawk.customers.ui.screens.CreateCustomerRoute
+import com.hawk.customers.ui.screens.CustomersRoute
+import com.hawk.designsystem.composables.layout.HawkWorkspaceSection
 import com.hawk.products.ui.screens.CreateProductRoute
 import com.hawk.products.ui.screens.ProductsRoute
 
@@ -106,6 +110,20 @@ fun HawkNavHost() {
             ProductsRoute(
                 onCreateProductClicked = {
                     navController.navigate(HawkDestinations.createProduct)
+                },
+                onWorkspaceSectionSelected = { section ->
+                    navigateToWorkspaceSection(navController, section)
+                }
+            )
+        }
+
+        composable(HawkDestinations.customers) {
+            CustomersRoute(
+                onCreateCustomerClicked = {
+                    navController.navigate(HawkDestinations.createCustomer)
+                },
+                onWorkspaceSectionSelected = { section ->
+                    navigateToWorkspaceSection(navController, section)
                 }
             )
         }
@@ -113,9 +131,69 @@ fun HawkNavHost() {
         composable(HawkDestinations.createProduct) {
             CreateProductRoute(
                 onBackToProducts = {
-                    navController.popBackStack(HawkDestinations.products, false)
+                    navController.navigate(HawkDestinations.products) {
+                        popUpTo(HawkDestinations.products) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
+                onWorkspaceSectionSelected = { section ->
+                    navigateToWorkspaceSection(navController, section)
                 }
             )
         }
+
+        composable(HawkDestinations.createCustomer) {
+            CreateCustomerRoute(
+                onBackToCustomers = {
+                    navController.navigate(HawkDestinations.customers) {
+                        popUpTo(HawkDestinations.customers) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
+                onWorkspaceSectionSelected = { section ->
+                    navigateToWorkspaceSection(navController, section)
+                }
+            )
+        }
+    }
+}
+
+private fun navigateToWorkspaceSection(
+    navController: NavHostController,
+    section: HawkWorkspaceSection
+) {
+    when (section) {
+        HawkWorkspaceSection.Products -> {
+            navController.navigate(HawkDestinations.products) {
+                popUpTo(HawkDestinations.products) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        HawkWorkspaceSection.Customers -> {
+            navController.navigate(HawkDestinations.customers) {
+                popUpTo(HawkDestinations.customers) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        HawkWorkspaceSection.Logout -> {
+            navController.navigate(HawkDestinations.login) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        else -> Unit
     }
 }

@@ -2,10 +2,10 @@ package com.hawk.authentication.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,12 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -29,19 +29,26 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.window.core.layout.WindowSizeClass
+import com.hawk.common.ui.KeyboardAwareScrollContainer
 import com.hawk.home.theme.HawkBackground
 import com.hawk.home.theme.HawkBorder
 import com.hawk.home.theme.HawkPrimary
@@ -93,35 +100,45 @@ fun AuthenticationAdaptiveLayout(
                         .background(HawkSurface),
                     contentAlignment = Alignment.Center
                 ) {
-                    content(
-                        Modifier
+                    KeyboardAwareScrollContainer(
+                        modifier = Modifier
+                            .fillMaxHeight()
                             .padding(horizontal = 36.dp, vertical = 32.dp)
-                            .widthIn(max = 420.dp)
-                    )
+                            .widthIn(max = 420.dp),
+                        scrollbarColor = HawkPrimary.copy(alpha = 0.9f),
+                        scrollbarTrackColor = HawkBorder.copy(alpha = 0.55f)
+                    ) { scrollModifier ->
+                        content(scrollModifier)
+                    }
                 }
             }
         } else {
-            Column(
+            KeyboardAwareScrollContainer(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(HawkBackground)
                     .safeDrawingPadding()
-                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 20.dp, vertical = 18.dp),
-                verticalArrangement = Arrangement.spacedBy(18.dp)
-            ) {
-                LoginShowcaseHeader()
-                Surface(
-                    shape = RoundedCornerShape(28.dp),
-                    color = HawkSurface,
-                    tonalElevation = 0.dp,
-                    shadowElevation = 0.dp
+                scrollbarColor = HawkPrimary.copy(alpha = 0.9f),
+                scrollbarTrackColor = HawkBorder.copy(alpha = 0.55f)
+            ) { scrollModifier ->
+                Column(
+                    modifier = scrollModifier,
+                    verticalArrangement = Arrangement.spacedBy(18.dp)
                 ) {
-                    content(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp)
-                    )
+                    LoginShowcaseHeader()
+                    Surface(
+                        shape = RoundedCornerShape(28.dp),
+                        color = HawkSurface,
+                        tonalElevation = 0.dp,
+                        shadowElevation = 0.dp
+                    ) {
+                        content(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp)
+                        )
+                    }
                 }
             }
         }
@@ -204,6 +221,18 @@ fun AuthPasswordField(
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Done
 ) {
+    var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    val toggleIconRes = if (isPasswordVisible) {
+        com.hawk.R.drawable.ic_visibility_off
+    } else {
+        com.hawk.R.drawable.ic_visibility
+    }
+    val toggleContentDescriptionRes = if (isPasswordVisible) {
+        com.hawk.R.string.auth_hide_password
+    } else {
+        com.hawk.R.string.auth_show_password
+    }
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -214,11 +243,26 @@ fun AuthPasswordField(
         isError = errorRes != null,
         singleLine = true,
         shape = RoundedCornerShape(18.dp),
-        visualTransformation = PasswordVisualTransformation(),
+        visualTransformation = if (isPasswordVisible) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = imeAction
         ),
+        trailingIcon = {
+            IconButton(
+                onClick = { isPasswordVisible = !isPasswordVisible }
+            ) {
+                Icon(
+                    painter = painterResource(toggleIconRes),
+                    contentDescription = stringResource(toggleContentDescriptionRes),
+                    tint = HawkTextMuted
+                )
+            }
+        },
         supportingText = {
             errorRes?.let { errorMessageRes ->
                 Text(

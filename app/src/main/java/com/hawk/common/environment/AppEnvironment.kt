@@ -9,9 +9,6 @@ object AppEnvironment {
     val keycloakTokenPath: String
         get() = BuildConfig.KEYCLOAK_TOKEN_PATH
 
-    val keycloakTokenUrl: String
-        get() = "${BuildConfig.KEYCLOAK_BASE_URL}${BuildConfig.KEYCLOAK_TOKEN_PATH}"
-
     val keycloakClientId: String
         get() = BuildConfig.KEYCLOAK_CLIENT_ID
 
@@ -24,9 +21,17 @@ object AppEnvironment {
     val productsListPath: String
         get() = BuildConfig.PRODUCTS_LIST_PATH
 
-    val productsListUrl: String
-        get() = "${BuildConfig.PRODUCTS_BASE_URL}${BuildConfig.PRODUCTS_LIST_PATH}"
+    val productsCreatePath: String
+        get() = BuildConfig.PRODUCTS_CREATE_PATH
 
-    const val formContentType: String = "application/x-www-form-urlencoded"
+    val customersBaseUrl: String
+        get() = BuildConfig.CUSTOMERS_BASE_URL
+
+    val customersListPath: String
+        get() = BuildConfig.CUSTOMERS_LIST_PATH
+
+    val customersCreatePath: String
+        get() = BuildConfig.CUSTOMERS_CREATE_PATH
+
     const val databaseName: String = "hawk.db"
 }

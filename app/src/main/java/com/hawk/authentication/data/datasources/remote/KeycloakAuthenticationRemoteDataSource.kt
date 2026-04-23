@@ -2,7 +2,6 @@ package com.hawk.authentication.data.datasources.remote
 
 import com.hawk.authentication.data.datasources.remote.interfaces.AuthenticationRemoteDataSource
 import com.hawk.authentication.data.dto.KeycloakTokenDto
-import com.hawk.authentication.data.mappers.toKeycloakTokenDto
 import com.hawk.authentication.domain.entities.AuthenticationException
 import com.hawk.common.environment.AppEnvironment
 import com.hawk.utils.coroutines.IoDispatcher
@@ -12,12 +11,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
 
 class KeycloakAuthenticationRemoteDataSource @Inject constructor(
     private val authenticationApi: AuthenticationApi,
-    private val json: Json,
     @param:IoDispatcher private val coroutineDispatcher: CoroutineDispatcher
 ) : AuthenticationRemoteDataSource {
 
@@ -27,7 +23,7 @@ class KeycloakAuthenticationRemoteDataSource @Inject constructor(
     ): Flow<Result<KeycloakTokenDto>> = flow {
         try {
             val response = authenticationApi.authenticate(
-                url = AppEnvironment.keycloakTokenUrl,
+                url = AppEnvironment.keycloakTokenPath,
                 clientId = AppEnvironment.keycloakClientId,
                 grantType = AppEnvironment.keycloakGrantType,
                 username = username,
@@ -36,11 +32,10 @@ class KeycloakAuthenticationRemoteDataSource @Inject constructor(
 
             when {
                 response.isSuccessful -> {
-                    val payload = response.body()?.string().orEmpty()
-                    if (payload.isBlank()) {
+                    val dto = response.body()
+                    if (dto == null) {
                         emit(Result.failure(AuthenticationException.InvalidPayload()))
                     } else {
-                        val dto = json.parseToJsonElement(payload).jsonObject.toKeycloakTokenDto()
                         emit(Result.success(dto))
                     }
                 }

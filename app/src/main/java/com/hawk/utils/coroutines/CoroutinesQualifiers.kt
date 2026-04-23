@@ -21,3 +21,8 @@ annotation class MainDispatcher
 @Retention(RUNTIME)
 @Qualifier
 annotation class MainImmediateDispatcher
+
+
+@Retention(RUNTIME)
+@Qualifier
+annotation class ApplicationScopeDispatcher

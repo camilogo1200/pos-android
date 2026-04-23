@@ -12,3 +12,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+.android-user/
+.codex_tmp_hawk_fig/

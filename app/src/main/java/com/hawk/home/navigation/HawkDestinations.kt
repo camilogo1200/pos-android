@@ -11,6 +11,8 @@ object HawkDestinations {
     const val connectionError = "connection_error"
     const val products = "products"
     const val createProduct = "create_product"
+    const val customers = "customers"
+    const val createCustomer = "create_customer"
 
     fun checkEmail(email: String): String = "check_email/${Uri.encode(email)}"
 }

@@ -1,7 +1,7 @@
 package com.hawk.products.domain.usecases.impl
 
-import com.hawk.products.data.repository.interfaces.ProductsRepository
 import com.hawk.products.domain.entities.Product
+import com.hawk.products.domain.repository.interfaces.ProductsRepository
 import com.hawk.products.domain.usecases.interfaces.GetProductsUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow

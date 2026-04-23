@@ -1,6 +1,6 @@
 package com.hawk.authentication.data.datasources.remote
 
-import okhttp3.ResponseBody
+import com.hawk.authentication.data.dto.KeycloakTokenDto
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -16,5 +16,5 @@ interface AuthenticationApi {
         @Field("grant_type") grantType: String,
         @Field("username") username: String,
         @Field("password") password: String
-    ): Response<ResponseBody>
+    ): Response<KeycloakTokenDto>
 }

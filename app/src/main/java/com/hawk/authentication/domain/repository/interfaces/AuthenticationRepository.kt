@@ -1,4 +1,4 @@
-package com.hawk.authentication.data.repository.interfaces
+package com.hawk.authentication.domain.repository.interfaces
 
 import com.hawk.authentication.domain.entities.AuthenticationSession
 import kotlinx.coroutines.flow.Flow
