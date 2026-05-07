@@ -33,5 +33,14 @@ object AppEnvironment {
     val customersCreatePath: String
         get() = BuildConfig.CUSTOMERS_CREATE_PATH
 
+    val transactionsBaseUrl: String
+        get() = BuildConfig.TRANSACTIONS_BASE_URL
+
+    val transactionsListPath: String
+        get() = BuildConfig.TRANSACTIONS_LIST_PATH
+
+    val transactionsCreatePath: String
+        get() = BuildConfig.TRANSACTIONS_CREATE_PATH
+
     const val databaseName: String = "hawk.db"
 }

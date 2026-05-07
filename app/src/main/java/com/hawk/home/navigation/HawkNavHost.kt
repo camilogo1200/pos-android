@@ -18,6 +18,8 @@ import com.hawk.customers.ui.screens.CustomersRoute
 import com.hawk.designsystem.composables.layout.HawkWorkspaceSection
 import com.hawk.products.ui.screens.CreateProductRoute
 import com.hawk.products.ui.screens.ProductsRoute
+import com.hawk.transactions.ui.screens.CreateTransactionRoute
+import com.hawk.transactions.ui.screens.TransactionsRoute
 
 @Composable
 fun HawkNavHost() {
@@ -128,11 +130,38 @@ fun HawkNavHost() {
             )
         }
 
+        composable(HawkDestinations.transactions) {
+            TransactionsRoute(
+                onCreateTransactionClicked = {
+                    navController.navigate(HawkDestinations.createTransaction)
+                },
+                onWorkspaceSectionSelected = { section ->
+                    navigateToWorkspaceSection(navController, section)
+                }
+            )
+        }
+
         composable(HawkDestinations.createProduct) {
             CreateProductRoute(
                 onBackToProducts = {
                     navController.navigate(HawkDestinations.products) {
                         popUpTo(HawkDestinations.products) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                },
+                onWorkspaceSectionSelected = { section ->
+                    navigateToWorkspaceSection(navController, section)
+                }
+            )
+        }
+
+        composable(HawkDestinations.createTransaction) {
+            CreateTransactionRoute(
+                onBackToTransactions = {
+                    navController.navigate(HawkDestinations.transactions) {
+                        popUpTo(HawkDestinations.transactions) {
                             inclusive = true
                         }
                         launchSingleTop = true
@@ -170,6 +199,15 @@ private fun navigateToWorkspaceSection(
         HawkWorkspaceSection.Products -> {
             navController.navigate(HawkDestinations.products) {
                 popUpTo(HawkDestinations.products) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+
+        HawkWorkspaceSection.Orders -> {
+            navController.navigate(HawkDestinations.transactions) {
+                popUpTo(HawkDestinations.transactions) {
                     inclusive = true
                 }
                 launchSingleTop = true

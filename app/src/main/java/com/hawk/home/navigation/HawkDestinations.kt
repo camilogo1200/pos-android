@@ -13,6 +13,8 @@ object HawkDestinations {
     const val createProduct = "create_product"
     const val customers = "customers"
     const val createCustomer = "create_customer"
+    const val transactions = "transactions"
+    const val createTransaction = "create_transaction"
 
     fun checkEmail(email: String): String = "check_email/${Uri.encode(email)}"
 }

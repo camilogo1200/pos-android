@@ -30,6 +30,9 @@ android {
         buildConfigField("String", "CUSTOMERS_BASE_URL", "\"http://192.168.68.52:3000/\"")
         buildConfigField("String", "CUSTOMERS_LIST_PATH", "\"customers\"")
         buildConfigField("String", "CUSTOMERS_CREATE_PATH", "\"customers\"")
+        buildConfigField("String", "TRANSACTIONS_BASE_URL", "\"http://192.168.68.52:3000/\"")
+        buildConfigField("String", "TRANSACTIONS_LIST_PATH", "\"transactions\"")
+        buildConfigField("String", "TRANSACTIONS_CREATE_PATH", "\"transactions\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

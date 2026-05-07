@@ -39,7 +39,7 @@
   <string name="auth_password_reset_success_body">Your password has been changed successfully. Sign in again with your new password.</string>
   <string name="nav_dashboard">Dashboard</string>
   <string name="nav_products">Products</string>
-  <string name="nav_orders">Orders</string>
+  <string name="nav_orders">Transactions</string>
   <string name="nav_customers">Customers</string>
   <string name="nav_sales">Sales</string>
   <string name="nav_cash">Cash</string>
